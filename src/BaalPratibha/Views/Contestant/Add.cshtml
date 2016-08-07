@@ -1,0 +1,51 @@
+﻿@model BaalPratibha.Models.User
+
+
+<div class="col-sm-10 col-sm-offset-1">
+    <form class="form form-horizontal" asp-controller="Contestant" asp-action="Add" method="post">
+        <h3>Add New Contestant</h3>
+
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Full Name</label>
+            <div class="col-sm-6">
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">User Name</label>
+            <div class="col-sm-6">
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Password</label>
+            <div class="col-sm-6">
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label">Confirm Password</label>
+            <div class="col-sm-6">
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-3 control-label"></label>
+            <div class="col-sm-6">
+                <input asp-for="Role" type="hidden" value="@BaalPratibha.Models.Enums.Roles.Contestant.ToString()" class="form-control" />
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary col-sm-offset-3">Add Contestant</button>
+
+    </form>
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

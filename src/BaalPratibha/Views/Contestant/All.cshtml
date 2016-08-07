@@ -1,0 +1,85 @@
+﻿@using System.Runtime.InteropServices
+@using BaalPratibha.Models.ViewModels
+@model List<ContestantView>
+
+<div class="col-sm-12">
+
+    <h3>
+        Contestants
+        <br />
+    </h3>
+    <div class="nav nav-pills">
+        @{ var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();}
+        @if (isAdmin)
+        {
+
+            <a class="btn btn-primary" asp-controller="Contestant" asp-action="Add">Add New Contestant</a>
+
+        }
+        <div class="text-muted pull-right">Total Contestants: @Model.Count()</div>
+    </div>
+
+
+    @if (Model.Any())
+    {
+        <div class="table table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Full Name</th>
+                        <th>Age</th>
+                        <th>Suburb</th>
+                        <th>Parent</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Total Votes</th>
+                        @if (isAdmin)
+                        {
+                            <th>UserName</th>
+                            <th>Password</th>
+                            <th>Actions</th>
+                        }
+                    </tr>
+                </thead>
+                @{ var count = 1; }
+                @foreach (ContestantView view in Model)
+                {
+                    <tr>
+                        <td>@count</td>
+                        <td>
+                            <a href="@Url.Content($"~/{view.UserName}")"> @view.FullName</a>
+                        </td>
+                        <td>@view.Age</td>
+                        <td>@view.Suburb</td>
+                        <td>@view.ParentsName</td>
+                        <td>@view.Contact</td>
+                        <td>@view.Email</td>
+                        <td>@view.TotalVotes</td>
+
+                        @if (isAdmin)
+                        {
+                            <td>@view.UserName</td>
+                            <td>@view.Password</td>
+                            <td>
+                                <a asp-controller="Contestant" asp-action="Update" asp-route-userId="@view.Id" class="btn btn-default">Edit</a>
+
+                                <form asp-action="Delete" asp-controller="Contestant" asp-route-userid="@view.Id" class="form form-horizontal inline">
+                                    <button type="submit" class="btn btn-warning confirm-form-post">Delete</button>
+                                </form>
+
+                            </td>
+                        }
+                    </tr>
+                    count++;
+                }
+            </table>
+        </div>
+                    }
+                    else
+                    {
+                        <span>Could not find any contestants. <a asp-controller="Contestant" asp-action="Add">Add Contestants</a></span>
+                    }
+
+
+</div>

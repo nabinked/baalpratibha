@@ -1,0 +1,38 @@
+﻿@model BaalPratibha.Models.ViewModels.ContestantView
+@inject BaalPratibha.Logic.ImageProcessing _imageProcessing;
+
+@section meta {
+    <meta property="og:url" content="@Url.Content("~/" + @Model.UserName)" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="Baal Pratibha: Vote for @Model.FullName " />
+    <meta property="og:description" content="@Model.AboutMe" />
+    <meta property="og:image" content="@_imageProcessing.GetImage(Model.Id)" />
+    <meta property="og:site_name" content="Baal Pratibha" />
+}
+
+
+<script type="text/javascript">
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: '156122114814449',
+            xfbml: true,
+            version: 'v2.7'
+        });
+    };
+
+    (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) { return; }
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function share(parameters) {
+        FB.ui({
+            method: 'share',
+            href: '@Url.Content("http://localhost:5000/" + Model.UserName)',
+        }, function (response) { });
+    }
+
+</script>

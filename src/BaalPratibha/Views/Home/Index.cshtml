@@ -1,0 +1,20 @@
+﻿@using BaalPratibha.Models.ViewModels
+@model HomePageView
+
+
+@if (Model.ContestantViewList.Any())
+{
+    <h3>Top Contestants</h3>
+    <div class="row">
+        @foreach (ContestantView view in Model.ContestantViewList)
+        {
+
+            @Html.Partial("_ContestantTile", view)
+
+        }
+    </div>
+}
+else
+{
+    <div class="jumbotron">Sorry, No Contestants found</div>
+}

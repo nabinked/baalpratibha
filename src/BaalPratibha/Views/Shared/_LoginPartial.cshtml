@@ -1,0 +1,54 @@
+﻿@if (User.Identity.IsAuthenticated)
+{
+
+    <li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user"></span>
+            <strong>Hello @User.GetUserName()</strong>
+            <span class="glyphicon glyphicon-chevron-down"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <div class="navbar-login">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-center">
+                                <span class="glyphicon glyphicon-user icon-size"></span>
+                            </p>
+                        </div>
+                        <div class="col-sm-12">
+                            <p class="text-center">
+                                <strong>@User.GetFullName()</strong>
+                                <br />
+                                <span class="text-muted">@User.GetRole()</span>
+                            </p>
+                            <p class="text-center">@User.GetSuburb()</p>
+                            <p class="text-left">
+                                <a asp-controller="Account" asp-action="UpdateProfile" asp-route-userId="@User.GetId()" class="btn btn-primary btn-block">Update Profile</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </li>
+
+
+
+    <li>
+
+
+    </li>
+    <li>
+        <a asp-controller="Account" asp-action="LogOff">Log off</a>
+
+    </li>
+
+}
+else
+{
+    <li>
+        <a class="item" asp-controller="Account" asp-action="Login">Log in</a>
+
+    </li>
+}

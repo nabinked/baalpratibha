@@ -1,0 +1,69 @@
+﻿@model BaalPratibha.Models.ViewModels.ContestantView
+@inject BaalPratibha.Logic.IViewHelper _viewHelper
+
+<div class="row">
+    <div class="col-sm-12" style="padding-bottom: 25px">
+        <h2>
+            @Model.FullName
+            <br />
+            <small>@Model.TotalVotes Votes</small>
+        </h2>
+        <div align="center" class="embed-responsive embed-responsive-16by9">
+            <iframe height="200" width="100%"
+                    src="@_viewHelper.GetYoutubeEmbedSrc(Model.PerformanceVideoUrl)" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-5">
+        @await Html.PartialAsync("_ContestantPhotoHolder", new BaalPratibha.Models.ViewModels.ProfileImageViewModel() { UserId = Model.Id, ImageCssClass = "img-rounded", Height = "100%", Width = "100%" })
+    </div>
+    <div class="col-sm-7 table-responsive">
+        <h3 style="margin-top: 5px; margin-bottom: 5px">
+            Profile
+        </h3>
+
+        <table class="table table-borderless table-padless">
+            <tr>
+                <td>Age</td>
+                <td>@Model.Age</td>
+            </tr>
+            <tr>
+                <td>Suburb</td>
+                <td>@Model.Suburb</td>
+            </tr>
+            <tr>
+                <td>Parent</td>
+                <td>@Model.ParentsName</td>
+            </tr>
+            <tr>
+                <td>Contact </td>
+                <td>@Model.Contact</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>@Model.Email</td>
+            </tr>
+        </table>
+        <h3 style="margin-top: 5px; margin-bottom: 5px">About Me</h3>
+        <p class="lead">@Model.AboutMe</p>
+    </div>
+</div>
+<div class="row" style="padding-top: 15px">
+    <div class="col-sm-12" style="padding: 0px">
+        <p class="col-sm-6">
+            <a asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id" class="btn btn-success btn-lg btn-block">VOTE</a>
+        </p>
+        <p class="col-sm-6">
+            <button type="button" onclick="share()" class="btn btn-success btn-lg btn-block">SHARE</button>
+       
+
+        </p>
+       
+    </div>
+</div>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_FacebookScripts", Model); }
+}

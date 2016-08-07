@@ -1,0 +1,104 @@
+﻿@model BaalPratibha.Models.ViewModels.UpdateContestantViewModel
+@inject BaalPratibha.Logic.ImageProcessing imageProcessing
+
+<div class="row">
+
+    <div class="col-sm-5 pull-right">
+        @await Html.PartialAsync("_ContestantPhotoHolder", new BaalPratibha.Models.ViewModels.ProfileImageViewModel() { UserId = Model.ContestantDetail.UserId, ImageCssClass = "img-rounded", Height = "100%", Width = "100%" })
+    </div>
+    <div class="col-sm-7">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">Update Profile</h2>
+            </div>
+
+            <div class="panel-body">
+                <form class="form-horizontal" asp-action="Update" asp-controller="Contestant" method="post">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">User Name</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" asp-for="UserName" readonly="readonly" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Full Name</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" asp-for="FullName" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    @*For Contestant Details*@
+                    <div class="form-group hidden">
+                        <input type="text" class="form-control" asp-for="ContestantDetail.UserId" readonly="readonly" />
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Age</label>
+                        <div class="col-sm-7">
+                            <input type="number" class="form-control" asp-for="ContestantDetail.Age" />
+                            <span asp-validation-for="ContestantDetail.Age" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Suburb</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" asp-for="ContestantDetail.Suburb" />
+                            <span asp-validation-for="ContestantDetail.Suburb" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Parents Name</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" asp-for="ContestantDetail.ParentsName" />
+                            <span asp-validation-for="ContestantDetail.ParentsName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Contact No.</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" asp-for="ContestantDetail.Contact" />
+                            <span asp-validation-for="ContestantDetail.Contact" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Email</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" asp-for="ContestantDetail.Email" />
+                            <span asp-validation-for="ContestantDetail.Email" class="text-danger"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">About Me</label>
+                        <div class="col-sm-7">
+                            <textarea type="text" class="form-control" asp-for="ContestantDetail.AboutMe"></textarea>
+                            <span asp-validation-for="ContestantDetail.AboutMe" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @{
+                        var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();
+                        if (isAdmin)
+                        {
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Performance Video URL</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" asp-for="ContestantDetail.PerformanceVideoUrl" placeholder="Youtube link to contestant's performance'" />
+                                    <span asp-validation-for="ContestantDetail.PerformanceVideoUrl" class="text-danger"></span>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <button type="submit" class="col-sm-offset-3 btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
