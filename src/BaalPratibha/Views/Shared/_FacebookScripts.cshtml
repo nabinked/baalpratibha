@@ -31,8 +31,10 @@
     function share(parameters) {
         FB.ui({
             method: 'share',
-            href: '@Url.Content("http://localhost:5000/" + Model.UserName)',
+            href: '@Url.Content("~/" + @Model.UserName)'
         }, function (response) { });
+
     }
+
 
 </script>
