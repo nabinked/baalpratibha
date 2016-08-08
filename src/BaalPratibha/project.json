@@ -28,7 +28,7 @@
     },
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
     "Npgsql": "3.1.6",
-    "NToastNotify": "1.0.0-*"
+    "NToastNotify": "1.0.0"
   },
 
   "tools": {
