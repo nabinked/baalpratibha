@@ -15,7 +15,7 @@ $$ LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS core.calc_rank_weight(bigint, bigint);
 CREATE OR REPLACE FUNCTION core.calc_rank_weight(bigint, bigint) RETURNS numeric(100, 2) as $$
         BEGIN
-                RETURN ($1 * 0.40) + ($2 * 0.60);
+                RETURN ($1 * 0.60) + ($2 * 0.40);
         END;
 $$ LANGUAGE plpgsql;
 
