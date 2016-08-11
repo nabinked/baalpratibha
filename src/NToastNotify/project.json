@@ -24,6 +24,9 @@
   },
   "buildOptions": {
     "embed": "Views/**/*.cshtml"
+  },
+  "runtimes": { 
+    "win7-x86": {} 
   }
 
 }
