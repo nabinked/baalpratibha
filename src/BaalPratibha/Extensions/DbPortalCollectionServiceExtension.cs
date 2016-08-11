@@ -12,6 +12,7 @@ namespace BaalPratibha.Extensions
             services.AddSingleton<ContestantDb>();
             services.AddSingleton<UserDb>();
             services.AddSingleton<VoteDb>();
+            services.AddSingleton<ShareDb>();
 
             return services;
         }

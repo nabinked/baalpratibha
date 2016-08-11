@@ -20,6 +20,6 @@ namespace BaalPratibha.Models
         [Required]
         public string AboutMe { get; set; }
 
-        public Uri PerformanceVideoUrl { get; set; }
+        public string PerformanceVideoUrl { get; set; }
     }
 }

@@ -26,17 +26,23 @@ namespace BaalPratibha.Controllers
                                     ContestantDb contestantDb,
                                     UserDb userDb,
                                     VoteDb voteDb,
+                                    IViewHelper viewHelper,
+                                    ShareDb shareDb,
                                     ImageProcessing imageProcessing) : base(toastNotification)
         {
             _contestantDb = contestantDb;
             _userDb = userDb;
             _voteDb = voteDb;
+            _viewHelper = viewHelper;
+            _shareDb = shareDb;
             _imageProcessing = imageProcessing;
         }
 
         private readonly ContestantDb _contestantDb;
         private readonly UserDb _userDb;
         private readonly VoteDb _voteDb;
+        private readonly IViewHelper _viewHelper;
+        private readonly ShareDb _shareDb;
         private readonly ImageProcessing _imageProcessing;
         // GET: /<controller>/
 
@@ -105,20 +111,24 @@ namespace BaalPratibha.Controllers
         {
             if (!string.IsNullOrWhiteSpace(userName))
             {
+                _shareDb.UpdateAllShares();
                 var contestantView = _contestantDb.GetContestantViewByUserName(userName);
-                return View(contestantView);
+                if (contestantView != null)
+                    return View(contestantView);
             }
             return RedirectToAction("Index", "Home");
         }
-
+        [Authorize]
         public IActionResult Update(int userId)
         {
+            if (User.GetRole() != Models.Enums.Roles.Admin.ToString() && userId != User.GetId()) return Forbid();
             var user = _userDb.GetUserById(userId);
             if (user == null)
             {
                 return ShowError("user could not be found on the database.");
             }
             var contestantDetail = _contestantDb.GetContestantDetailByUserId(userId) ?? new ContestantDetail();
+            ViewBag.ProfilePagePhotoId = userId;
             return View(new UpdateContestantViewModel() { FullName = user.FullName, UserName = user.UserName, ContestantDetail = contestantDetail });
 
         }
@@ -148,7 +158,7 @@ namespace BaalPratibha.Controllers
                 }
 
             }
-            return View(contestantViewModel);
+            return RedirectToAction("Update", new { userId = contestantViewModel.ContestantDetail.UserId });
 
         }
 

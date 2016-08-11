@@ -11,8 +11,6 @@
         );
     --One Admin
     INSERT INTO core.users (user_name, password, full_name, role) VALUES('admin','bpadmin','Baal Pratibha Admin', 'Admin');
-    --One User
-    INSERT INTO core.users (user_name, password,full_name, role) VALUES('samara','shrestha','Samara Shrestha', 'Contestant');
 
 
     DROP TABLE IF EXISTS core.contestant_details;
@@ -27,8 +25,6 @@
         about_me                text NOT NULL
 
         );
-    INSERT INTO core.contestant_details (user_id, age,suburb, parents_name, contact, email, about_me) 
-                                    VALUES(1,12,'Hurstville','Hari Bahadur','0449664244','samara@outlook.com','This is about samara shrestha and who she is');
 
     DROP TABLE IF EXISTS core.votes;
     CREATE TABLE IF NOT EXISTS core.votes(
@@ -40,6 +36,7 @@
 
     DROP TABLE IF EXISTS core.shares;
     CREATE TABLE IF NOT EXISTS core.shares(
-        id                  bigserial PRIMARY KEY,
-        contestant_id       int REFERENCES core.users ON DELETE CASCADE
+        contestant_id       int UNIQUE REFERENCES core.users ON DELETE CASCADE,
+        total_shares        int 
+
     );

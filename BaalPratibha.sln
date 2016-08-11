@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BaalPratibha", "src\BaalPratibha\BaalPratibha.xproj", "{F5DAFE7F-E498-4873-8451-E979888A2376}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NToastNotify", "..\NToastNotify\NToastNotify\NToastNotify.xproj", "{FC027640-F194-444B-AABE-6AB0F0CCC37C}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NToastNotify", "src\NToastNotify\NToastNotify.xproj", "{FC027640-F194-444B-AABE-6AB0F0CCC37C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

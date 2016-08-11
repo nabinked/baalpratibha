@@ -1,4 +1,7 @@
-﻿@if (User.Identity.IsAuthenticated)
+﻿@inject BaalPratibha.Logic.ImageProcessing _imageProcessing;
+
+
+@if (User.Identity.IsAuthenticated)
 {
 
     <li class="dropdown">
@@ -13,7 +16,8 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <p class="text-center">
-                                <span class="glyphicon glyphicon-user icon-size"></span>
+                                @*<img class="img img-responsive img-circle icon-size" src="@_imageProcessing.GetImage(User.GetId())"/>*@
+                                <span class="fa fa-user fa-lg icon-size"></span>
                             </p>
                         </div>
                         <div class="col-sm-12">

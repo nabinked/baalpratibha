@@ -4,7 +4,7 @@
 <div class="row">
 
     <div class="col-sm-5 pull-right">
-        @await Html.PartialAsync("_ContestantPhotoHolder", new BaalPratibha.Models.ViewModels.ProfileImageViewModel() { UserId = Model.ContestantDetail.UserId, ImageCssClass = "img-rounded", Height = "100%", Width = "100%" })
+        @await Html.PartialAsync("_ContestantPhotoHolder", new BaalPratibha.Models.ViewModels.ProfileImageViewModel() { UserId = ViewBag.ProfilePagePhotoId, ImageCssClass = "img-rounded", Height = "100%", Width = "100%" })
     </div>
     <div class="col-sm-7">
         <div class="panel panel-default">

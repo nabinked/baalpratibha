@@ -28,14 +28,14 @@ namespace BaalPratibha.DbPortal
 
         public Models.ContestantDetail GetContestantDetailByUserId(int userId)
         {
-            const string sql = "SELECT user_id as UserId, age, suburb, parents_name as ParentsName, contact, email, about_me as aboutme FROM core.contestant_details WHERE user_id = @UserId";
+            const string sql = "SELECT user_id as UserId, age, suburb, parents_name as ParentsName, contact, email, performance_video_url as PerformanceVideoUrl, about_me as aboutme FROM core.contestant_details WHERE user_id = @UserId";
 
             return Connection.QueryFirstOrDefault<Models.ContestantDetail>(sql, new { UserId = userId });
         }
 
         public int Update(ContestantDetail contestantDetail)
         {
-            const string sql = "UPDATE core.contestant_details SET age = @Age,suburb = @Suburb, parents_name = @ParentsName, contact = @Contact , email = @Email, about_me =@AboutMe WHERE user_id = @UserId;";
+            const string sql = "UPDATE core.contestant_details SET age = @Age,suburb = @Suburb, parents_name = @ParentsName, contact = @Contact , email = @Email, performance_video_url=@PerformanceVideoUrl, about_me =@AboutMe WHERE user_id = @UserId;";
 
             return Connection.Execute(sql, contestantDetail);
         }

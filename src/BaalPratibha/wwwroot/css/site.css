@@ -52,13 +52,12 @@ textarea {
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
-    -webkit-box-shadow: -1px 6px 6px 2px #999;
-    -moz-box-shadow: -1px 6px 6px 2px #999;
-    -ms-box-shadow: -1px 6px 6px 2px #999;
-    box-shadow: -1px 6px 6px 2px #999;
+    -webkit-box-shadow: -1px 4px 4px 2px;
+    -moz-box-shadow: -1px 4px 4px 2px;
+    -ms-box-shadow: -1px 4px 4px 2px;
+    box-shadow: -1px 4px 4px 2px;
     background-color: white;
     min-height: 600px;
-    padding-bottom: 12%;
 }
 
 .no-margin {
@@ -80,4 +79,12 @@ textarea {
 
 .table-padless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
     padding: 1px;
+}
+
+.main-bg-color {
+    background-color: #133e69
+}
+
+.main-color {
+    color: #CEE024;
 }

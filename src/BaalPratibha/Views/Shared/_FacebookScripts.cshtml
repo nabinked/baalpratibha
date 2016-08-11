@@ -1,14 +1,4 @@
 ﻿@model BaalPratibha.Models.ViewModels.ContestantView
-@inject BaalPratibha.Logic.ImageProcessing _imageProcessing;
-
-@section meta {
-    <meta property="og:url" content="@Url.Content("~/" + @Model.UserName)" />
-    <meta property="og:type" content="profile" />
-    <meta property="og:title" content="Baal Pratibha: Vote for @Model.FullName " />
-    <meta property="og:description" content="@Model.AboutMe" />
-    <meta property="og:image" content="@_imageProcessing.GetImage(Model.Id)" />
-    <meta property="og:site_name" content="Baal Pratibha" />
-}
 
 
 <script type="text/javascript">
@@ -28,12 +18,15 @@
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
 
-    function share(parameters) {
+    function share() {
         FB.ui({
             method: 'share',
-            href: '@Url.Content("~/" + @Model.UserName)'
-        }, function (response) { });
-
+            href: '@Url.Action("Index", "Home",null,"http")@Model.UserName',
+            hashtag: '#BaalPratibha'
+        },
+            function (response) {
+                Window.refresh();
+            });
     }
 
 

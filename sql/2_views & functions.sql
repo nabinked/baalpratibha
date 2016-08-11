@@ -8,7 +8,7 @@ $$ LANGUAGE plpgsql;
 DROP FUNCTION IF EXISTS core.get_total_shares(bigint);
 CREATE OR REPLACE FUNCTION core.get_total_shares(bigint) RETURNS integer as $$
         BEGIN
-                RETURN (SELECT COUNT(*) FROM core.shares WHERE contestant_id = $1);
+                RETURN (SELECT total_shares FROM core.shares WHERE contestant_id = $1);
         END;
 $$ LANGUAGE plpgsql;
 
@@ -24,7 +24,7 @@ $$ LANGUAGE plpgsql;
 
 DROP VIEW IF EXISTS core.contestant_view;
 CREATE OR REPLACE VIEW  core.contestant_view AS (
-	SELECT v.*, core.calc_rank_weight(TotalVotes, TotalShares) FROM 
+	SELECT *,  dense_rank() OVER (ORDER BY core.calc_rank_weight(TotalVotes, TotalShares) desc) as Rank FROM 
 (
     SELECT  u.id,
             u.user_name as UserName,
@@ -36,10 +36,11 @@ CREATE OR REPLACE VIEW  core.contestant_view AS (
             cd.contact,
             cd.email,
             cd.about_me as AboutMe,
+            cd.performance_video_url as PerformanceVideoUrl,
             core.get_total_votes(u.id) as TotalVotes,
             core.get_total_shares(u.id) as TotalShares
     FROM core.users as u 
         LEFT OUTER JOIN core.contestant_details cd ON cd.user_id = u.id
         WHERE u.Role = 'Contestant'
-) v
+) v1
 );

@@ -4,7 +4,7 @@
 @inject BaalPratibha.Logic.IViewHelper _viewHelper;
 
 <div style="height: @Model.Height">
-    <img src="@_imageProcessing.GetImage(Model.UserId)" class="img-responsive @Model.ImageCssClass" alt="Profile Picture" style="width: @Model.Width; height: @Model.Height;" />
+    <img src="@Url.Content("~"+_imageProcessing.GetImage(Model.UserId))" class="img-responsive @Model.ImageCssClass" alt="Profile Picture" style="width: @Model.Width; height: @Model.Height;" />
 
     @if (User.Identity.IsAuthenticated && Model.UserId == User.GetId())
     {

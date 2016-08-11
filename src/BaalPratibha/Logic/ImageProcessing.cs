@@ -6,17 +6,22 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace BaalPratibha.Logic
 {
     public class ImageProcessing
     {
         private readonly IHostingEnvironment _environment;
+        private readonly IUrlHelper _urlHelper;
         private readonly AppSettings _settings;
 
-        public ImageProcessing(IOptions<AppSettings> options, IHostingEnvironment environment)
+        public ImageProcessing(IOptions<AppSettings> options, IHostingEnvironment environment, IUrlHelperFactory urlHelperFactory, IActionContextAccessor actionContextAccessor)
         {
             _environment = environment;
+            _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext); ;
             _settings = options.Value;
         }
 
@@ -29,8 +34,8 @@ namespace BaalPratibha.Logic
             if (files.Length > 0)
             {
 
-                string fileName = Path.GetFileName(files[0]);
-                fullPath = Path.Combine("/", _settings.UserImagesFolder, Path.GetFileName(fileName));
+                var fileName = Path.GetFileName(files[0]);
+                fullPath = _settings.UserImagesFolder + Path.GetFileName(fileName);
             }
             return fullPath.Replace("\\", "/");
         }

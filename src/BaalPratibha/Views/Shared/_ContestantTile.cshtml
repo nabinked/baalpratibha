@@ -1,31 +1,38 @@
-﻿@using BaalPratibha.Logic
-@using BaalPratibha.Models.ViewModels
-@using Microsoft.AspNetCore.Mvc.Razor
-@model ContestantView
-@inject ImageProcessing ImageProcessing;
+﻿@model BaalPratibha.Models.ViewModels.ContestantView
+@inject BaalPratibha.Logic.IViewHelper _viewHelper;
 
 @if (Model != null)
 {
-    <a href="~/@Model.UserName">
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <button class="btn btn-success pull-right">VOTE</button>
-                    <h4>
-                        @Model.FullName
+
+    <div class="col-sm-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <a class="btn btn-success pull-right" asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id">
+                    <strong>VOTE</strong>
+                </a>
+                <h4>
+                    <a href="@Url.Content("~/"+Model.UserName)">
+                        @Model.Rank. @Model.FullName
+                    </a>
                     <br />
-                    <small>@Model.TotalVotes Votes</small>
+                    <small>
+                        <strong>
+                            @Model.TotalVotes Votes | @Model.TotalShares Shares
+                        </strong>
+                    </small>
                 </h4>
 
             </div>
             <div class="panel-body">
+
                 @await Html.PartialAsync("_ContestantPhotoHolder", new BaalPratibha.Models.ViewModels.ProfileImageViewModel() { UserId = Model.Id, ImageCssClass = "img-rounded", Height = "250px", Width = "inherit" })
-                <div class="clearfix"></div>
-                <div>Age: @Model.Age</div>
-                <div> @Model.Suburb</div>
+                <a href="@Url.Content("~/"+Model.UserName)" style="text-decoration: none">
+                    <div class="clearfix"></div>
+                    <div>Age: @Model.Age</div>
+                    <div> @Model.Suburb</div>
+                </a>
             </div>
         </div>
     </div>
-</a>
 
 }

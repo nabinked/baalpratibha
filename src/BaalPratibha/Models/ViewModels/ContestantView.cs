@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace BaalPratibha.Models.ViewModels
 {
@@ -11,12 +14,16 @@ namespace BaalPratibha.Models.ViewModels
         public string Password { get; set; }
         public string FullName { get; set; } = "Not Provided";
         public int Age { get; set; }
-        public string Suburb { get; set; } = "Not Provided";
-        public string ParentsName { get; set; } = "Not Provided";
+        public string Suburb { get; set; } = "Sydney";
+        public string ParentsName { get; set; } = "Parent's Name";
         public string Contact { get; set; } = "Not Provided";
         public string Email { get; set; } = "Not Provided";
-        public string AboutMe { get; set; } = "I am a contestant in Baal Pratibha";
+        public string AboutMe { get; set; } = "I am a contestant in Baal Pratibha. Please vote for me and share as much as you can.";
         public int TotalVotes { get; set; }
-        public Uri PerformanceVideoUrl { get; set; } = new Uri("https://www.youtube.com/watch?v=Fb2LE3VRB7g");
+
+        public int TotalShares { get; set; }
+
+        public int Rank { get; set; }
+        public string PerformanceVideoUrl { get; set; }
     }
 }

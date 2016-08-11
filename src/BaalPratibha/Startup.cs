@@ -4,6 +4,9 @@ using BaalPratibha.Logic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -45,8 +48,12 @@ namespace BaalPratibha
             services.AddNToastNotify();
             services.AddOptions();
             services.AddMvc();
+
             services.AddSingleton<ImageProcessing>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
+            services.AddSingleton<IUrlHelper, UrlHelper>();
             services.AddScoped<IViewHelper, ViewHelper>();
             services.AddAuthorization(options =>
             {
@@ -67,9 +74,9 @@ namespace BaalPratibha
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseDeveloperExceptionPage();
+                //app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
@@ -80,6 +87,8 @@ namespace BaalPratibha
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true
             });
+
+
 
             app.UseMvc(routes =>
             {
