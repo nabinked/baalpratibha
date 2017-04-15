@@ -54,7 +54,7 @@ namespace BaalPratibha
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
             services.AddSingleton<IUrlHelper, UrlHelper>();
-            services.AddScoped<IViewHelper, ViewHelper>();
+            services.AddTransient<IViewHelper, ViewHelper>();
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));

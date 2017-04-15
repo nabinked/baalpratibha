@@ -1,36 +1,54 @@
 ﻿@inject BaalPratibha.DbPortal.UserDb _userDb
+@inject BaalPratibha.Logic.IViewHelper _viewHelper
+
 
 @model BaalPratibha.Models.Vote
-<div class="col-sm-10 col-sm-offset-1">
-    <div class="panel panel-success">
-        <div class="panel-heading">
-            <h4>Vote for @_userDb.GetUserById(Model.ContestantId).FullName</h4>
-        </div>
-        <div class="panel-body">
-            <form class="form form-horizontal" asp-controller="Contestant" asp-action="Vote" method="post">
+@{
+    if (_viewHelper.IsVotingPeriod)
+    {
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="panel panel-success">
+                @{
+                    var name = _userDb.GetUserById(Model.ContestantId).FullName;
 
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Voter Name</label>
-                    <div class="col-sm-6">
-                        <input asp-for="VoterName" class="form-control" />
-                        <span asp-validation-for="VoterName" class="text-danger"></span>
+
+                    <div class="panel-heading">
+
+                        <h4>Vote for @name</h4>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-lg-3 control-label">Voter Email</label>
-                    <div class="col-sm-6">
-                        <input asp-for="VoterEmail" type="email" class="form-control" />
-                        <span asp-validation-for="VoterEmail" class="text-danger"></span>
+                    <div class="panel-body">
+                        <h3>You are voting for @name</h3>
+                        <form class="form form-horizontal" asp-controller="Contestant" asp-action="Vote" method="post">
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Voter Name</label>
+                                <div class="col-sm-6">
+                                    <input asp-for="VoterName" class="form-control" />
+                                    <span asp-validation-for="VoterName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label">Voter Email</label>
+                                <div class="col-sm-6">
+                                    <input asp-for="VoterEmail" type="email" class="form-control" />
+                                    <span asp-validation-for="VoterEmail" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <input asp-for="ContestantId" type="hidden" class="form-control" />
+
+                            <button type="submit" class="btn btn-success col-sm-offset-3">VOTE</button>
+
+                        </form>
                     </div>
-                </div>
-                <input asp-for="ContestantId" type="hidden" class="form-control" />
-
-                <button type="submit" class="btn btn-success col-sm-offset-3">VOTE</button>
-
-            </form>
+                }
+            </div>
         </div>
-    </div>
-</div>
+
+                    }
+                    else
+                    {
+                        <h4>Voting not allowed right now. Voting period not started or finished.</h4>
+                    }
+}
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

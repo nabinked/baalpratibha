@@ -23,6 +23,8 @@ namespace BaalPratibha.Models.ViewModels
 
         public int TotalShares { get; set; }
 
+        public decimal RankWeight { get; set; }
+
         public int Rank { get; set; }
         public string PerformanceVideoUrl { get; set; }
     }

@@ -2,7 +2,7 @@
   "userSecretsId": "baal_pratibha_user_secret_id",
 
   "dependencies": {
-    "BundlerMinifier.Core": "2.0.238",
+    "BundlerMinifier.Core": "2.2.281",
     "Dapper": "1.50.2",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.AspNetCore.Authorization": "1.0.0",

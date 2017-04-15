@@ -1,15 +1,18 @@
 ﻿@using System.Runtime.InteropServices
 @using BaalPratibha.Models.ViewModels
 @model List<ContestantView>
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> options
+@inject BaalPratibha.Logic.IViewHelper _viewHelper;
+
+
 
 <div class="col-sm-12">
-
+    @{ var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();}
     <h3>
         Contestants
-        <br />
     </h3>
     <div class="nav nav-pills">
-        @{ var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();}
+
         @if (isAdmin)
         {
 
@@ -23,17 +26,54 @@
     @if (Model.Any())
     {
         <div class="table-responsive">
-            <table class="table table-hover table-condensed">
+            <table class="table table-hover table-condensed table-padless">
                 <thead>
                     <tr>
-                        <th>Rank</th>
-                        <th>Full Name</th>
-                        <th>Age</th>
-                        <th>Suburb</th>
-                        <th>Parent</th>
-                        <th>Contact</th>
-                        <th>Email</th>
-                        <th>Total Votes</th>
+
+
+                        @{
+                            if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                            {
+                                <th>
+                                    <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="Rank_Asc">Rank</a>
+                                </th>
+
+                            }
+                        }
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="FullName_Asc">Full Name</a>
+                        </th>
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="Age_Asc">Age</a>
+                        </th>
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="Suburb_Asc">Suburb</a>
+                        </th>
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="ParentsName_Asc">Parent</a>
+                        </th>
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="Contact_Asc">Contact</a>
+                        </th>
+                        <th>
+                            <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="Email_Asc">Email</a>
+                        </th>
+                        @{
+                            if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                            {
+                                <th>
+                                    <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="TotalVotes_Desc">Votes</a>
+                                </th>
+                                <th>
+                                    <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="TotalShares_Desc">Shares</a>
+                                </th>
+                                <th>
+                                    <a asp-controller="Contestant" asp-action="All" asp-route-orderBy="RankWeight_Desc">Weight</a>
+                                </th>
+
+                            }
+                        }
+
                         @if (isAdmin)
                         {
                             <th>UserName</th>
@@ -45,16 +85,29 @@
                 @foreach (ContestantView view in Model)
                 {
                     <tr>
-                        <td>@view.Rank</td>
+                        @{ if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                            {
+                                <td>@view.Rank</td>
+
+                            }
+                        }
                         <td>
-                            <a href="@Url.Content($"~/{view.UserName}")"> @view.FullName</a>
+                            <a href="@Url.Content("~/"+view.UserName)"> @view.FullName</a>
                         </td>
                         <td>@view.Age</td>
                         <td>@view.Suburb</td>
                         <td>@view.ParentsName</td>
                         <td>@view.Contact</td>
                         <td>@view.Email</td>
-                        <td>@view.TotalVotes</td>
+                        @{ if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                            {
+                                <td>@view.TotalVotes</td>
+                                <td>@view.TotalShares</td>
+                                <td>@view.RankWeight.ToString("F")</td>
+                            }
+                        }
+
+
 
                         @if (isAdmin)
                         {
@@ -79,16 +132,17 @@
                                 <button type="button" class="btn btn-default">
                                     <img src="/images/voting.png" class="img-responsive" height="18" width="18" />
 
-                                </button>                            </a>
+                                </button>
+                            </a>
                     </tr>
-                }
+                            }
             </table>
         </div>
-    }
-    else
-    {
-        <span>Could not find any contestants. <a asp-controller="Contestant" asp-action="Add">Add Contestants</a></span>
-    }
+                            }
+                            else
+                            {
+                                <span>Could not find any contestants. <a asp-controller="Contestant" asp-action="Add">Add Contestants</a></span>
+                            }
 
 
 </div>

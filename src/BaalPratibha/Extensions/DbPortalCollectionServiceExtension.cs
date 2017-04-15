@@ -9,10 +9,10 @@ namespace BaalPratibha.Extensions
         {
 
             services.AddScoped<IConnectionFactory, ConnectionFactory>();
-            services.AddSingleton<ContestantDb>();
-            services.AddSingleton<UserDb>();
-            services.AddSingleton<VoteDb>();
-            services.AddSingleton<ShareDb>();
+            services.AddScoped<ContestantDb>();
+            services.AddScoped<UserDb>();
+            services.AddScoped<VoteDb>();
+            services.AddScoped<ShareDb>();
 
             return services;
         }

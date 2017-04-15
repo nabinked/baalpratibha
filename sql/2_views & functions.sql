@@ -15,7 +15,7 @@
 	DROP FUNCTION IF EXISTS core.calc_rank_weight(bigint, bigint);
 	CREATE OR REPLACE FUNCTION core.calc_rank_weight(bigint, bigint) RETURNS numeric(100, 2) as $$
 		BEGIN
-			RETURN (COALESCE($1,0) * 0.60) + (COALESCE($2,0) * 0.40);
+			RETURN (COALESCE($1,0)::numeric * 0.50) + (COALESCE($2,0)::numeric * 0.50);
 		END;
 	$$ LANGUAGE plpgsql;
 
@@ -24,7 +24,7 @@
 
 	DROP VIEW IF EXISTS core.contestant_view;
 	CREATE OR REPLACE VIEW  core.contestant_view AS (
-		SELECT *,  dense_rank() OVER (ORDER BY core.calc_rank_weight(TotalVotes, TotalShares) desc) as Rank FROM 
+		SELECT *, core.calc_rank_weight(TotalVotes, TotalShares) as RankWeight,  dense_rank() OVER (ORDER BY core.calc_rank_weight(TotalVotes, TotalShares) desc) as Rank FROM 
 	(
 	    SELECT  u.id,
 		    u.user_name as UserName,

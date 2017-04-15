@@ -8,6 +8,7 @@ namespace BaalPratibha.Controllers
     public class BaseController : Controller
     {
 
+
         public IActionResult ShowError(string errorMessage)
         {
             return View("Error", errorMessage);

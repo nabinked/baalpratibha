@@ -82,9 +82,30 @@ textarea {
 }
 
 .main-bg-color {
-    background-color: #133e69
+    background-color: #133e69;
 }
 
 .main-color {
     color: #CEE024;
+}
+
+.announcement {
+    font-size: x-large;
+    text-align: center;
+    background-color: #133e69;
+    color: white;
+    margin-bottom: 10px;
+    height: 70px;
+}
+
+.fb-page,
+.fb-page span,
+.fb-page span iframe[style] {
+    width: 100% !important;
+}
+
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #ccc;
 }

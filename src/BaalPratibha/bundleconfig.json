@@ -26,6 +26,7 @@
       "wwwroot/lib/jquery-validation/dist/jquery.validate.js",
       "wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js",
       "Wwwroot/lib/toastr/toastr.js",
+      "wwwroot/js/gistfile1.js",
       "wwwroot/js/site.js"
     ],
     // Optionally specify minification options

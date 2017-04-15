@@ -36,8 +36,8 @@ namespace BaalPratibha.Controllers
             if (!string.IsNullOrWhiteSpace(userName) && !string.IsNullOrWhiteSpace(password))
             {
                 var contestant = _userDb.GetUserByUserName(userName);
-
-                if (contestant != null)
+                bool passWordMatch = contestant.Password.Equals(password); 
+                if (contestant != null && passWordMatch)
                 {
 
                     var claims = new List<Claim>()

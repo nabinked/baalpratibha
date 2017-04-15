@@ -1,17 +1,50 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.Extensions.Options.IOptions<AppSettings> options
+
+
+<!DOCTYPE html>
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    @RenderSection("Meta", required: false)
-    <title>Baal Pratibha: Online Voting System</title>
+    <meta name="description" content="Baal Pratibha is a kids talent competition show in Australia brought to you by Lahuri TV" />
 
-    <link href="~/css/site.min.css" rel="stylesheet" />
-    <script src="~/js/site.min.js"></script>
+    @RenderSection("Meta", required: false)
+
+    @{
+
+        var title = ViewData["Title"];
+        if (title == null)
+        {
+            title = "Online Voting System";
+        }
+
+    }
+    <title>Baal Pratibha: @title</title>
+
+    <link href="~/css/site.min.css" asp-append-version="true" rel="stylesheet" />
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
     @{ await Html.RenderPartialAsync("_FavIconHeadLinksPartial"); }
 
 </head>
 <body class="main-bg-color" style="position: relative">
+    <script type="text/javascript">
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '1190790847677639',
+                xfbml: true,
+                version: 'v2.7'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
     <div class="container">
 
 
@@ -34,23 +67,27 @@
                     <div id="navbar" class="navbar-collapse collapse">
 
                         <ul class="nav navbar-nav">
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                             <li><a asp-controller="Contestant" asp-action="All">Contestants</a></li>
                             <li><a href="@Url.Action("RankingMethod", "Home")">Ranking Method</a></li>
-                            @*<li>
-                                    <form class="navbar-form" role="search" asp-controller="Search">
-                                        <div class="input-group">
-                                            <input type="search" name="SearchString" class="form-control pull-right input" placeholder="Search contestants..." />
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                            </span>
-                                        </div>
-                                    </form>
-                                </li>*@
                             <li>
                                 <a href="@Url.Action("About", "Home")">About</a>
                             </li>
                             <li>
-                                <a href="@Url.Action("Contact", "Home")">Contact</a>
+                                <a href="@Url.Action("Finals", "Home")">Finals</a>
+                            </li>
+                            <li>
+                                <form class="navbar-form" role="search" asp-controller="Search">
+                                    <div class="input-group">
+                                        <input type="search" name="SearchString" class="form-control pull-right input" placeholder="Search contestants..." />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                        </span>
+
+                                    </div>
+
+                                </form>
+
                             </li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -62,14 +99,40 @@
             </div>
 
         </nav>
-        <div style="padding-top: 20px" class="body-content">
-            @RenderBody()
+        <div style="padding-top: 20px; float: left; width: 100%" class="body-content">
+            <div class="row">
+                <div class="col-sm-6">
+                    @{ await Html.RenderPartialAsync("_Announcement");}
+                    <h5 style="margin:2px;">Announcement</h5>
+
+                    <div>
+                        @options.Value.Announcement
+                    </div>
+                </div>
+                <div class="col-sm-6" style="margin-left:auto; margin-right:auto">
+                    <div class="fb-page" data-href="https://www.facebook.com/LahuriTv/" data-adapt-container-width="true" data-width="500" data-small-header="false" data-hide-cover="false" data-show-facepile="false">
+
+                    </div>
+                </div>
+            </div>
+            <div>
+                @RenderBody()
+            </div>
+
+            <div style="clear: both">
+                <img src="~/images/sponsers.png" class="img img-responsive sponser-img" style="width: 90%; height: 150px; padding-top: 10px; padding-bottom: 10px;opacity: 0.9;border-radius: 25px; margin-left:auto; margin-right:auto" />
+                <small style="position: absolute; bottom: 2px; color: white; clear: both">
+                    Developed by <strong><a href="http://www.facebook.com/nabinked" style="display: inline; padding: 0; text-decoration: none; color: antiquewhite">Nabin Karki Thapa</a>. </strong>
+                </small>
+            </div>
+
         </div>
-        <small style="position: absolute; bottom: 2px; color: white">
-            Developed by Nabin Karki Thapa. <a style="display: inline; padding: 0; text-decoration: none; color: white" href="http://www.lahuri.com.au"><strong>Lahuri TV</strong></a>
-        </small>
+        @await Component.InvokeAsync("NToastNotify.Toastr")
+        @RenderSection("scripts", required: false)
     </div>
-    @await Component.InvokeAsync("NToastNotify.Toastr")
-    @RenderSection("scripts", required: false)
+    <script>
+        $('.marquee').marquee();
+
+    </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 ﻿using BaalPratibha.Logic;
 using BaalPratibha.Models;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace BaalPratibha.DbPortal
 {
@@ -15,20 +16,33 @@ namespace BaalPratibha.DbPortal
             _viewHelper = viewHelper;
         }
 
-        public void UpdateAllShares()
+        public async Task<int> UpdateAllShares()
         {
             var contestants = _contestantDb.GetAllContestants();
             foreach (var contestantView in contestants)
             {
-                var totalFbShares = _viewHelper.GetShares(contestantView.UserName).Result;
+                var totalFbShares = await _viewHelper.GetShares(contestantView.UserName);
                 if (GetTotalDbShares(contestantView.Id) < totalFbShares)
                 {
-                    Upsert(contestantView.Id, totalFbShares);
+                    return Upsert(contestantView.Id, totalFbShares);
                 }
             }
+            return 0;
         }
 
-        public void Upsert(long contestantId, long shares)
+        public async Task<int> UpdateShare(string userName)
+        {
+            var contestantView = _contestantDb.GetContestantViewByUserName(userName);
+
+            var totalFbShares = await _viewHelper.GetShares(contestantView.UserName);
+            if (GetTotalDbShares(contestantView.Id) < totalFbShares)
+            {
+                return Upsert(contestantView.Id, totalFbShares);
+            }
+            return 0;
+        }
+
+        public int Upsert(long contestantId, long shares)
         {
 
             const string sql = @"INSERT INTO core.shares(contestant_id, total_shares)
@@ -37,7 +51,7 @@ namespace BaalPratibha.DbPortal
                                     do update set total_shares = @TotalShares
                                 RETURNING total_shares;";
 
-            Connection.Execute(sql, new { ContestantId = contestantId, TotalShares = shares });
+            return Connection.Execute(sql, new { ContestantId = contestantId, TotalShares = shares });
         }
 
         public long GetTotalDbShares(long contestantId)

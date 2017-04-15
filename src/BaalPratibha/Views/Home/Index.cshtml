@@ -1,10 +1,32 @@
 ﻿@using BaalPratibha.Models.ViewModels
 @model HomePageView
+@inject BaalPratibha.Logic.IViewHelper _viewHelper;
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> options
 
 
 @if (Model.ContestantViewList.Any())
 {
-    <h3>Top Contestants</h3>
+    <h3>
+        Contestants
+        @{
+            var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();
+            if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+            {
+                <small>
+                    (ordered by rank)
+                </small>
+
+            }
+            else
+            {
+                <small>
+                    (ordered alphabetically)
+                </small>
+
+            }
+        }
+
+    </h3>
     <div class="row">
         @foreach (ContestantView view in Model.ContestantViewList)
         {

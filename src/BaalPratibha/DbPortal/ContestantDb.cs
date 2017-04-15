@@ -47,9 +47,14 @@ namespace BaalPratibha.DbPortal
             return Connection.QueryFirstOrDefault<int>(sql, contestantDetail);
         }
 
-        public IList<ContestantView> GetAllContestants()
+        public IList<ContestantView> GetAllContestants(string orderBy = "fullname_asc")
         {
-            const string sql = "SELECT * FROM core.contestant_view;";
+            string sql = "SELECT * FROM core.contestant_view";
+            if (!string.IsNullOrWhiteSpace(orderBy))
+            {
+                sql += " order by " + orderBy.Split('_')[0].ToLower() + " " + orderBy.Split('_')[1].ToLower();
+            }
+            sql += ";";
             return Connection.Query<ContestantView>(sql).ToList();
         }
 

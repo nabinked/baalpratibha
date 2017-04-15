@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Npgsql;
 using NToastNotify;
 
@@ -28,7 +29,8 @@ namespace BaalPratibha.Controllers
                                     VoteDb voteDb,
                                     IViewHelper viewHelper,
                                     ShareDb shareDb,
-                                    ImageProcessing imageProcessing) : base(toastNotification)
+                                    ImageProcessing imageProcessing,
+                                    IOptions<AppSettings> appOptions) : base(toastNotification)
         {
             _contestantDb = contestantDb;
             _userDb = userDb;
@@ -36,6 +38,7 @@ namespace BaalPratibha.Controllers
             _viewHelper = viewHelper;
             _shareDb = shareDb;
             _imageProcessing = imageProcessing;
+            _appSettings = appOptions.Value;
         }
 
         private readonly ContestantDb _contestantDb;
@@ -44,12 +47,19 @@ namespace BaalPratibha.Controllers
         private readonly IViewHelper _viewHelper;
         private readonly ShareDb _shareDb;
         private readonly ImageProcessing _imageProcessing;
+        private AppSettings _appSettings;
         // GET: /<controller>/
 
-        public IActionResult All()
+        public IActionResult All(string orderBy = "Rank_Asc")
         {
-            var contestants = _contestantDb.GetAllContestants();
-            return View(contestants.OrderBy(c => c.Id).ToList());
+            var isAdmin = User.GetRole() == Models.Enums.Roles.Admin.ToString();
+
+            var showVoteDetails = _viewHelper.ShowVoteDetails(isAdmin, _appSettings.ShowVotes);
+
+            orderBy = _viewHelper.GetOrderBy(showVoteDetails, orderBy);
+
+            var contestants = _contestantDb.GetAllContestants(orderBy.ToLower());
+            return View(contestants);
         }
 
 
@@ -61,13 +71,15 @@ namespace BaalPratibha.Controllers
 
         [Authorize(Policy = "AdminOnly")]
         [HttpPost]
-        public IActionResult Add(User user)
+        public async Task<IActionResult> Add(User user, string email)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
                     _userDb.Insert(user);
+                    var emailSender = new Email(email, user.FullName, user.UserName, user.Password);
+                    var result = await emailSender.SendMail();
                     return RedirectToAction(nameof(All));
                 }
                 catch (PostgresException ex)
@@ -107,11 +119,14 @@ namespace BaalPratibha.Controllers
         }
 
         [Route("/{userName}")]
-        public IActionResult Profile(string userName)
+        public async Task<IActionResult> Profile(string userName)
         {
             if (!string.IsNullOrWhiteSpace(userName))
             {
-                _shareDb.UpdateAllShares();
+                if (_appSettings.IsVotingPeriod)
+                {
+                    await _shareDb.UpdateShare(userName);
+                }
                 var contestantView = _contestantDb.GetContestantViewByUserName(userName);
                 if (contestantView != null)
                     return View(contestantView);
@@ -263,6 +278,14 @@ namespace BaalPratibha.Controllers
                 return View(vote);
             }
 
+        }
+
+        [HttpGet]
+        public IActionResult Search(string searchString)
+        {
+            var contestants = new List<ContestantView>();
+
+            return Json()
         }
     }
 }

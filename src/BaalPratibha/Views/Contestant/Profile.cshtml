@@ -1,13 +1,15 @@
 ﻿@model BaalPratibha.Models.ViewModels.ContestantView
 @inject BaalPratibha.Logic.IViewHelper _viewHelper
 @inject BaalPratibha.Logic.ImageProcessing _imageProcessing;
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> options
+
 
 
 @section Meta {
     <meta property="og:url" content="@Url.Action("Index", "Home",null,"http")@Model.UserName" />
     <meta property="og:type" content="profile" />
     <meta property="og:title" content="Baal Pratibha: Vote for @Model.FullName" />
-    <meta property="og:description" content="Baal Pratibha is a kids talent competition in Sydney organizaed by Lahuri TV and Nepalese Australia Youth Association." />
+    <meta property="og:description" content="@Model.AboutMe" />
     <meta property="og:image" content="@Url.Action("Index", "Home",null,"http")@_imageProcessing.GetImage(Model.Id)" />
     <meta property="og:site_name" content="Baal Pratibha" />
 }
@@ -21,11 +23,18 @@
         <h2>
             @Model.FullName
             <br />
-            <small>
-                <strong>
-                    @Model.TotalVotes Votes | @Model.TotalShares Shares
-                </strong>
-            </small>
+            @{
+                var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString();
+                if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                {
+                    <small>
+                        <strong>
+                            @Model.TotalVotes Votes | @Model.TotalShares Shares
+                        </strong>
+                    </small>
+                }
+            }
+
         </h2>
 
         @if (string.IsNullOrEmpty(Model.PerformanceVideoUrl))
@@ -76,23 +85,30 @@
         <p class="lead">@Model.AboutMe</p>
     </div>
 </div>
-<div class="row" style="padding-top: 15px">
-    <div class="col-sm-12" style="padding: 0px">
-        <p class="col-sm-6">
-            <a asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id" class="btn btn-success btn-lg btn-block">
-                (@Model.TotalVotes) VOTE
-            </a>
-        </p>
-        <p class="col-sm-6">
-            <button type="button" onclick="share()" class="btn btn-success btn-lg btn-block">
-                (@Model.TotalShares) SHARE
-            </button>
+
+@{
+    if (_viewHelper.IsVotingPeriod)
+    {
+        <div class="row" style="padding-top: 15px">
+            <div class="col-sm-12" style="padding: 0px">
+                <p class="col-sm-6">
+                    <a asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id" class="btn btn-success btn-lg btn-block">
+                        (@Model.TotalVotes) VOTE
+                    </a>
+                </p>
+                <p class="col-sm-6">
+                    <button type="button" onclick="share()" class="btn btn-success btn-lg btn-block">
+                        (@Model.TotalShares) SHARE
+                    </button>
 
 
-        </p>
+                </p>
 
-    </div>
-</div>
+            </div>
+        </div>
+    }
+
+}
 
 
 @section Scripts {

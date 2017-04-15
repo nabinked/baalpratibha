@@ -83,10 +83,14 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Performance Video URL</label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control" asp-for="ContestantDetail.PerformanceVideoUrl" placeholder="Youtube link to contestant's performance'" />
+                                    <input type="text" class="form-control" asp-for="ContestantDetail.PerformanceVideoUrl" placeholder="Youtube link to contestant's performance'"/>
                                     <span asp-validation-for="ContestantDetail.PerformanceVideoUrl" class="text-danger"></span>
                                 </div>
                             </div>
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="ContestantDetail.PerformanceVideoUrl"/>
                         }
                     }
 

@@ -1,25 +1,74 @@
 ﻿@model BaalPratibha.Models.ViewModels.ContestantView
 @inject BaalPratibha.Logic.IViewHelper _viewHelper;
+@inject Microsoft.Extensions.Options.IOptions<AppSettings> options
 
 @if (Model != null)
 {
 
     <div class="col-sm-4">
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <a class="btn btn-success pull-right" asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id">
-                    <strong>VOTE</strong>
-                </a>
+            @{var isAdmin = User.GetRole() == BaalPratibha.Models.Enums.Roles.Admin.ToString(); }
+            <div class="panel-heading" style="max-height:80px; min-height:80px">
+                @{
+                    if (_viewHelper.IsVotingPeriod)
+                    {
+                        <a class="btn btn-success pull-right" asp-controller="Contestant" asp-action="Vote" asp-route-id="@Model.Id">
+                            <strong>VOTE</strong>
+                        </a>
+
+                    }
+                }
                 <h4>
-                    <a href="@Url.Content("~/"+Model.UserName)">
-                        @Model.Rank. @Model.FullName
+                    <a href="@Url.Content("~/" + Model.UserName)">
+                        @{
+                            if (_viewHelper.ShowVoteDetails(isAdmin, options.Value.ShowVotes))
+                            {
+                                @Model.Rank
+
+                            }
+                        }
+
+
+
+
+                        @Model.FullName
                     </a>
-                    <br />
-                    <small>
-                        <strong>
-                            @Model.TotalVotes Votes | @Model.TotalShares Shares
-                        </strong>
-                    </small>
+                    @{
+                        if (User.Identity.IsAuthenticated && Model.Id == User.GetId())
+                        {
+                            <a asp-controller="Account" asp-action="UpdateProfile" asp-route-userId="@User.GetId()" class="btn btn-sm btn-info" style="padding:2px">
+                                <span class="fa fa-pencil"></span> Update
+
+                            </a>
+                        }}
+                    @{
+
+                        if (!isAdmin)
+                        {
+                            if (options.Value.ShowVotes)
+                            {
+                                <br />
+                                <small>
+                                    <strong>
+                                        @Model.TotalVotes Votes | @Model.TotalShares Shares
+                                    </strong>
+                                </small>
+
+                            }
+
+                        }
+                        else
+                        {
+
+                            <br />
+                            <small>
+                                <strong>
+                                    @Model.TotalVotes Votes | @Model.TotalShares Shares
+                                </strong>
+                            </small>
+                        }
+                    }
+
                 </h4>
 
             </div>
@@ -31,8 +80,9 @@
                     <div>Age: @Model.Age</div>
                     <div> @Model.Suburb</div>
                 </a>
+                <a href="@Url.Content("~/" + Model.UserName)" class="btn btn-info" style="padding:3px">View Profile</a>
             </div>
         </div>
     </div>
 
-}
+                        }
