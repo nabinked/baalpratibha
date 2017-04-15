@@ -285,7 +285,7 @@ namespace BaalPratibha.Controllers
         {
             var contestants = new List<ContestantView>();
 
-            return Json()
+            return Json();
         }
     }
 }
